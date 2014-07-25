@@ -23,7 +23,7 @@ This gem is very simple to use. After installing the gem, include it in your Act
     end
 
 Make sure that you have specified the array field in your migrations. Example:
-    `class CreateUsers < ActiveRecord::Migration
+```class CreateUsers < ActiveRecord::Migration
       def change
         create_table :users, force: true do |t|
           t.string  :name
@@ -31,7 +31,7 @@ Make sure that you have specified the array field in your migrations. Example:
           t.integer :comment_ids, array: true, default: []  # This is an array of ints
         end
       end
-    end`
+    end```
 
 This will give you a couple of instance methods used in updating and getting arrays.
 
