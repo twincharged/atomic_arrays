@@ -101,7 +101,7 @@ Here's how this gem would work in the same situation.
 ```ruby
 user = User.find(1)                                 |        user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>               |        # => <#User id: 2, blog_ids: [4, 16]>
-user.atomic_append(:blog_ids 20)                    |        .....
+user.atomic_append(:blog_ids 20)                    |        ..
 # => <#User id: 2, blog_ids: [4, 16, 20]>           |        user.atomic_append(:name, "John")
 .....                                               |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16, 20]>
 ```
