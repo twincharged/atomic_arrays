@@ -1,6 +1,6 @@
 # AtomicArrays
 
-AtomicArrays is a lightweight gem that aims to assist ActiveRecord with updating PostgreSQL arrays by offering a couple simple methods to update arrays in the database and the instance that it is called on. These methods are atomic in nature because they update the arrays in the database without relying on the current object's instantiated arrays.
+AtomicArrays is a lightweight gem that aims to assist ActiveRecord with PostgreSQL array operations by offering a couple simple methods to update arrays in the database and the instance that it is called on. These methods are atomic in nature because they update the arrays in the database without relying on the current object's instantiated arrays.
 
 ## Installation
 
