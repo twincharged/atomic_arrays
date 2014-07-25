@@ -109,7 +109,7 @@ user.atomic_append(:blog_ids 20)            |   ...
 ```
 The user will now have both of the updated arrays because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
 
-## Other
+## Etcetera
 
 Apologies for any syntax highlighting or grammar issues above.
 
