@@ -89,11 +89,12 @@ Here's an example of nonatomic arrays. Pretend the code on the left and right ar
 ```ruby
 user = User.find(1)                           |   user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>         |   # => <#User id: 2, blog_ids: [4, 16]>
-user.update({blog_ids: user.blog_ids+=[20]})  |   ...  
+user.blog_ids += [20]                         |   ...  
 # => <#User id: 2, blog_ids: [4, 16, 20]>     |   ...
-...                                           |   user.update({name: user.name+=["John"]})
+user.save                                     |   user.name += ["John"]
+# => <#User id: 2, blog_ids: [4, 16, 20]>     |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
+...                                           |   user.save
 ...                                           |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
-```
 The same user was being updated on both the left and right, and because the instance on the right side was saved last, it over-wrote the left side's added `blog_id` with its originally instantiated array.
 
 Here's how this gem would work in the same situation.
