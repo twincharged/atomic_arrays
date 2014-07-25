@@ -91,7 +91,7 @@ user = User.find(2)                           |   user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16]>         |   # => <#User id: 2, blog_ids: [4, 16]>
 user.blog_ids += [20]                         |   ...  
 # => <#User id: 2, blog_ids: [4, 16, 20]>     |   ...
-user.save                                     |   user.name += ["John"]
+user.save                                     |   user.names += ["John"]
 # => <#User id: 2, blog_ids: [4, 16, 20]>     |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
 ...                                           |   user.save
 ...                                           |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
