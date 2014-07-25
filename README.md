@@ -104,7 +104,7 @@ user = User.find(2)                         |   user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16]>       |   # => <#User id: 2, blog_ids: [4, 16]>
 user.atomic_append(:blog_ids 20)            |   ...
 # => <#User id: 2, blog_ids: [4, 16, 20]>   |   ...
-...                                         |   user.atomic_append(:name, "John")
+...                                         |   user.atomic_append(:names, "John")
 ...                                         |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16, 20]>
 ```
 The user will now have both of the updated arrays because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
