@@ -89,11 +89,12 @@ Here's an example of nonatomic arrays. Pretend the code on the left and right ar
 ```ruby
 user = User.find(1)                                 |        user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>               |        # => <#User id: 2, blog_ids: [4, 16]>
-user.blog_ids += [20]                               |             
-# => <#User id: 2, blog_ids: [4, 16, 20]>           |        user.name += ["John"]
+user.blog_ids += [20]                               |        ...  
+# => <#User id: 2, blog_ids: [4, 16, 20]>           |        ...
+...                                                 |        user.name += ["John"]
 user.save                                           |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
 # => <#User id: 2, blog_ids: [4, 16, 20]>           |        user.save
-                                                    |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
+...                                                 |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
 ```
 The same user was being updated on both the left and right, and because the instance on the right side was saved last, it over-wrote the added `blog_id` on the left side with its originally intantiated array.
 
@@ -101,13 +102,16 @@ Here's how this gem would work in the same situation.
 ```ruby
 user = User.find(1)                                 |        user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>               |        # => <#User id: 2, blog_ids: [4, 16]>
-user.atomic_append(:blog_ids 20)                    |        
-# => <#User id: 2, blog_ids: [4, 16, 20]>           |        user.atomic_append(:name, "John")
-                                                    |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16, 20]>
+user.atomic_append(:blog_ids 20)                    |        ...
+# => <#User id: 2, blog_ids: [4, 16, 20]>           |        ...
+...                                                 |        user.atomic_append(:name, "John")
+...                                                 |        # => <#User id: 2, names: ["John"], blog_ids: [4, 16, 20]>
 ```
 The user now will have both of the updated arrays because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
 
 ## Other
+
+Apologies for any syntax highlighting issues above.
 
 There is also a class method that this gem uses internally called `execute_and_wrap`. It was heavily influenced by `find_by_sql` in ActiveRecord, so thank you to the Rails guys.
 
