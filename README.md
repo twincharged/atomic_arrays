@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 This gem is very simple to use. After installing the gem, include it in your ActiveRecord-descended class. Example:
-```
+```ruby
 class User < ActiveRecord::Base
   include AtomicArrays
 end
@@ -40,7 +40,7 @@ This will give you a couple of instance methods used in updating and getting arr
 
 ### atomic_append(arraycolumn, value)
 atomic_append will take a single value to append it on to the end of the specified PG array. Example:
-```
+```ruby
 user = User.find(1)
 # => <#User id: 1, hobbies: ["Basketball", "Racing"]>
 user.atomic_append(:hobbies, "Eating")
@@ -49,7 +49,7 @@ user.atomic_append(:hobbies, "Eating")
 
 ### atomic_remove(arraycolumn, value)
 atomic_remove will remove a single value from the specified PG array. Example:
-```
+```ruby
 user = User.find(2)
 # => <#User id: 2, friend_ids: [12, 34, 89]>
 user.atomic_remove(:friend_ids, 12)
@@ -58,7 +58,7 @@ user.atomic_remove(:friend_ids, 12)
 
 ### atomic_cat(arraycolumn, valuearray)
 atomic_cat will concatenate an array of values with the specified PG array. Example:
-```
+```ruby
 user = User.find(2)
 # => <#User id: 2, friend_ids: [34, 89]>
 user.atomic_cat(:friend_ids, [34, 30, 56, 90])
@@ -67,7 +67,7 @@ user.atomic_cat(:friend_ids, [34, 30, 56, 90])
 
 ### atomic_relate(arraycolumn, relatedclass, limit=100)
 This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized db. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog id to your user's `blog_ids` column. When relating your user to his/her blogs (one->many), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. Example:
-```
+```ruby
 user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
 user.atomic_relate(:blog_ids, Blog)
@@ -86,7 +86,7 @@ While denormalizing using arrays may sound like an excellent performance prospec
 So be it. All methods in this gem share the same first argument. When you pass the array column name as the first argument, such as `user.atomic_append(:sports, "Golf")`, it doesn't call the instance's attribute with that name, but rather ignores it, updates the array in the database, then updates the instance's array with the returned columns. What does this mean?
 
 Here's an example of nonatomic arrays. Pretend the code on the left and right are happening at the same time:
-```
+```ruby
 user = User.find(1)                                 |        user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>               |        # => <#User id: 2, blog_ids: [4, 16]>
 user.blog_ids += [20]                               |        ...
@@ -98,7 +98,7 @@ user.save                                           |        # => <#User id: 2, 
 The same user was being updated on both the left and right, and because the instance on the right side was saved last, it over-wrote the added `blog_id` on the left side with its originally intantiated array.
 
 Here's how this gem would work in the same situation.
-```
+```ruby
 user = User.find(1)                                 |        user = User.find(1)
 # => <#User id: 2, blog_ids: [4, 16]>               |        # => <#User id: 2, blog_ids: [4, 16]>
 user.atomic_append(:blog_ids 20)                    |        ...
