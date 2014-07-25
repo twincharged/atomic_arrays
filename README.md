@@ -42,7 +42,7 @@ This will give you a couple of instance methods used in updating and getting arr
 atomic_append will take a single value to append it on to the end of the specified PG array. Example:
 ```ruby
 user = User.find(1)
-=> <#User id: 1, hobbies: ["Basketball", "Racing"]>
+# => <#User id: 1, hobbies: ["Basketball", "Racing"]>
 user.atomic_append(:hobbies, "Eating")
 # => <#User id: 1, hobbies: ["Basketball", "Racing", "Eating"]>  # "Eating" was appended to the array in the db.
 ```
@@ -72,10 +72,10 @@ user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
 user.atomic_relate(:blog_ids, Blog)
 # => [
-<#Blog id: 4, body: "This is my blog!">,
-<#Blog id: 16, body: "This is my other blog!">,
-<#Blog id: 74, body: "This is my third blog!">
-]
+#     <#Blog id: 4, body: "This is my blog!">,
+#     <#Blog id: 16, body: "This is my other blog!">,
+#     <#Blog id: 74, body: "This is my third blog!">
+#    ]
 ```
 This method is extremely performant, especially with large tables, because it uses a subquery to grab all of the user's `blog_ids` then immediately `unnests` the ids `IN` the primary ids of the `blogs` table. The subquery that this method employs has nearly zero overhead for performance. The power of this method really shows itself with (many->many) relationships. For instance, let's say each `Blog` has many authors and each `User` authors many blogs. Instead of having a `blog_users` join table, you can potentially just store all of the blogs' `user_ids` in one of its columns and the users' `blog_ids` on one of their columns. Then you could relate them using `atomic_relate`.
 
