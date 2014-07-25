@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 end
 ```
 Make sure that you have specified the array field in your migrations. Example:
-```
+```ruby
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users, force: true do |t|
