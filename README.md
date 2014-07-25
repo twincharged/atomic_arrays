@@ -66,7 +66,7 @@ user.atomic_cat(:friend_ids, [34, 30, 56, 90])
 ```
 
 ### atomic_relate(arraycolumn, relatedclass, limit=100)
-This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized db. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. Example:
+This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized db. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
