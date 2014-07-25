@@ -111,17 +111,19 @@ The user now will have both of the updated arrays because this gem's methods app
 
 ## Other
 
-Apologies for any syntax highlighting issues above.
+Apologies for any syntax highlighting or grammar issues above.
 
 There is also a class method that this gem uses internally called `execute_and_wrap`. It was heavily influenced by `find_by_sql` in ActiveRecord, so thank you to the Rails guys.
 
-This gem is focused on being both minimalistic and preformance-oriented. The entire gem is only about fifty lines of actual code. It was tested against Ruby-2.1.0. If you are looking to use the JRuby-AR adapter, this gem is very easy to replicate and modify to fit with the JRuby-AR adapter. I tried it with an earlier iteration of this gem and had no problems adapting it, but I have not tested this version of the gem with JRuby.
+This gem is focused on being both minimalistic and preformance-oriented. The entire gem is only about fifty lines of actual code. I tried to make the API as simple and predictable as possible. It was tested against Ruby-2.1.0. If you are looking to use the JRuby-AR adapter, this gem is very easy to replicate and modify to fit with the JRuby-AR adapter. I tried it with an earlier iteration of this gem and had no problems adapting it, but I have not tested this version of the gem with JRuby.
+
+If you find any issues or have any suggestions to improve this gem, open an issue!
 
 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/atomic_arrays/fork )
+1. Fork it ( https://github.com/twincharged/atomic_arrays/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
