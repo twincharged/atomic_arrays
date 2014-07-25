@@ -42,7 +42,7 @@ This will give you a couple of instance methods used in updating and getting arr
 atomic_append will take a single value to append it on to the end of the specified PG array. Example:
 ```ruby
 user = User.find(1)
-# => <#User id: 1, hobbies: ["Basketball", "Racing"]>
+=> <#User id: 1, hobbies: ["Basketball", "Racing"]>
 user.atomic_append(:hobbies, "Eating")
 # => <#User id: 1, hobbies: ["Basketball", "Racing", "Eating"]>  # "Eating" was appended to the array in the db.
 ```
