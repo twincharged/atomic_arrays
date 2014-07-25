@@ -48,7 +48,7 @@ user.atomic_append(:hobbies, "Eating")
 ```
 
 ### atomic_remove(arraycolumn, value)
-atomic_remove will remove a single value from the specified PG array. Example:
+atomic_remove will remove a single value from the specified PG array. It should be noted that the PG array "remove" function removes ALL occurences of that value, therefore this method does as well. Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, friend_ids: [12, 34, 89]>
