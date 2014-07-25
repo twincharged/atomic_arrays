@@ -87,7 +87,7 @@ So be it! All methods in this gem share the same first argument. When you pass t
 
 Here's an example of nonatomic arrays. Pretend the code on the left and right are happening at the same time:
 ```ruby
-user = User.find(1)                           |   user = User.find(1)
+user = User.find(2)                           |   user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16]>         |   # => <#User id: 2, blog_ids: [4, 16]>
 user.blog_ids += [20]                         |   ...  
 # => <#User id: 2, blog_ids: [4, 16, 20]>     |   ...
