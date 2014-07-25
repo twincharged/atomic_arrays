@@ -17,7 +17,7 @@ Or install it yourself as:
     $ gem install atomic_arrays
 
 ## Usage
-This gem is very simple to use. After installing the gem, include it in your ActiveRecord-descended class. Example:
+This gem is very simple to use. After bundling the gem, include it in your ActiveRecord-descended class. Example:
 ```ruby
 class User < ActiveRecord::Base
   include AtomicArrays
