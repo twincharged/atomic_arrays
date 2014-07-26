@@ -36,7 +36,7 @@ class CreateUsers < ActiveRecord::Migration
 end
 ```
 
-This will give you a couple of instance methods used in updating and getting arrays. The first argument of each method is the targeted array attribute/column and the second is the value/values.
+This will give you a couple of instance methods used in updating and relating arrays. The first argument of each method is the targeted array column and the second is the value/values.
 
 ### atomic_append(arraycolumn, value)
 atomic_append will take a single value to append it on to the end of the specified PG array. Example:
@@ -66,7 +66,7 @@ user.atomic_cat(:friend_ids, [34, 30, 56, 90])
 ```
 
 ### atomic_relate(arraycolumn, relatedclass, limit=100)
-This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized db. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! Example:
+This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized database that uses arrays. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog's id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
@@ -77,9 +77,9 @@ user.atomic_relate(:blog_ids, Blog)
 #     <#Blog id: 74, body: "This is my third blog!">
 #    ]
 ```
-This method is extremely performant, especially with large tables, because it uses a subquery to grab all of the user's `blog_ids` then immediately `unnests` the ids `IN` the primary ids of the `blogs` table. The subquery that this method employs has nearly zero overhead on performance. The power of this method really shows itself with (`many->many`) relationships. For instance, let's say each `Blog` has many authors and each `User` authors many blogs. Instead of having a `blog_users` join table, you can potentially just store all of the blogs' `user_ids` in one of its columns and the users' `blog_ids` on one of their columns. Then you could relate them by using `atomic_relate`.
+This method is extremely performant, especially with large tables because it uses a subquery to grab all of the user's `blog_ids` then immediately `unnests` the ids `IN` the primary id key of the `blogs` table. The subquery that this method employs has nearly zero overhead on performance. The power of this method really reveals itself with (`many->many`) relationships. For instance, let's say each `Blog` has many authors and each `User` authors many blogs. Instead of having a `blog_users` join table, you can potentially just store all of the blogs' `user_ids` in one of its columns and the users' `blog_ids` on one of their columns. Then you could relate them by using `atomic_relate`.
 
-While denormalizing using arrays may sound like an excellent performance prospect, there are a couple downsides. For instance, with the aformentioned (`many->many`) relationship, you will not be able to store any other attributes normally associated with a join table, such as an `updated_at` timestamp. Another downside is that arrays are much harder to query, even with a GIN index. Also, it should also be noted that PostgreSQL still lacks many features involving arrays, including foreign ids. Arrays should NOT be seen as a direct replacement for (`x->many`) tables/keys, but rather a very performant solution if your database NEEDS to be denormalized.
+While denormalizing using arrays may sound like an excellent performance prospect, there are a couple downsides. For instance, with the aformentioned (`many->many`) relationship, you will not be able to store any other columns normally associated with a join table, such as an `updated_at` timestamp. Another downside is that arrays are much harder to query than a join table, even with a GIN index. It should also be noted that PostgreSQL still lacks many features involving arrays, including foreign ids. Arrays should NOT be seen as a direct replacement for (`x->many`) tables/keys, but rather a very performant solution if your database NEEDS to be denormalized.
 
 
 ## Expound on this gem's assistance with atomicity.
