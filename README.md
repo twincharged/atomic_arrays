@@ -79,7 +79,7 @@ user.atomic_relate(:blog_ids, Blog)
 ```
 This method is extremely performant, especially with large tables, because it uses a subquery to grab all of the user's `blog_ids` then immediately `unnests` the ids `IN` the primary ids of the `blogs` table. The subquery that this method employs has nearly zero overhead on performance. The power of this method really shows itself with (`many->many`) relationships. For instance, let's say each `Blog` has many authors and each `User` authors many blogs. Instead of having a `blog_users` join table, you can potentially just store all of the blogs' `user_ids` in one of its columns and the users' `blog_ids` on one of their columns. Then you could relate them by using `atomic_relate`.
 
-While denormalizing using arrays may sound like an excellent performance prospect, there are a couple downsides. For instance, with the aformentioned (`many->many`) relationship, you will not be able to store any other attributes normally associated with a join table, such as an `updated_at` timestamp. Another downside is that arrays are much harder to query, even with a GIN index. Also, it should also be noted that PostgreSQL still has very few features involving arrays, including foreign ids. Arrays should NOT be seen as a direct replacement for (`x->many`) tables/keys, but rather a very performant solution if your database NEEDS to be denormalized.
+While denormalizing using arrays may sound like an excellent performance prospect, there are a couple downsides. For instance, with the aformentioned (`many->many`) relationship, you will not be able to store any other attributes normally associated with a join table, such as an `updated_at` timestamp. Another downside is that arrays are much harder to query, even with a GIN index. Also, it should also be noted that PostgreSQL still lacks many features involving arrays, including foreign ids. Arrays should NOT be seen as a direct replacement for (`x->many`) tables/keys, but rather a very performant solution if your database NEEDS to be denormalized.
 
 
 ## Expound on this gem's assistance with atomicity.
@@ -87,27 +87,25 @@ So be it! All methods in this gem share the same first argument. When you pass t
 
 Here's an example of nonatomic arrays. Pretend the code on the left and right are happening at the same time:
 ```ruby
-user = User.find(2)                         |   user = User.find(2)
-# => <#User id: 2, blog_ids: [4, 16]>       |   # => <#User id: 2, blog_ids: [4, 16]>
-user.blog_ids += [20]                       |   ...  
-# => <#User id: 2, blog_ids: [4, 16, 20]>   |   ...
-user.save                                   |   user.names += ["John"]
-# => <#User id: 2, blog_ids: [4, 16, 20]>   |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
-...                                         |   user.save
-...                                         |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16]>
+user = User.find(2)                           |   user = User.find(2)
+# => <#User id: 2, blog_ids: [4, 16]>         |   # => <#User id: 2, blog_ids: [4, 16]>
+user.update({blog_ids: user.blog_ids+=[20]})  |   ...  
+# => <#User id: 2, blog_ids: [4, 16, 20]>     |   ...
+...                                           |   user.update({blog_ids: user.blog_ids+=[35]})
+...                                           |   # => <#User id: 2, blog_ids: [4, 16, 35]>
 ```
-The same user was being updated on both the left and right, and because the instance on the right side was saved last, it over-wrote the left side's added `blog_id` with its originally instantiated array.
+The same user was being updated on both the left and right, and because the instance on the right side was updated last, it over-wrote the left side's added `blog_id` of `20` with its own `blog_id` update of `35`.
 
-Here's how this gem would work in the same situation.
+Here's how this gem works in the same situation.
 ```ruby
 user = User.find(2)                         |   user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16]>       |   # => <#User id: 2, blog_ids: [4, 16]>
 user.atomic_append(:blog_ids, 20)           |   ...
 # => <#User id: 2, blog_ids: [4, 16, 20]>   |   ...
-...                                         |   user.atomic_append(:names, "John")
-...                                         |   # => <#User id: 2, names: ["John"], blog_ids: [4, 16, 20]>
+...                                         |   user.atomic_append(:blog_ids, 35)
+...                                         |   # => <#User id: 2, blog_ids: [4, 16, 20, 35]>
 ```
-The user will now have both of the updated arrays because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
+The user's `blog_ids` will now include both `20` and `35` because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
 
 ## Etcetera
 
