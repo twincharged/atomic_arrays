@@ -38,8 +38,8 @@ end
 
 This will give you a couple of instance methods used in updating and relating arrays. The first argument of each method is the targeted array column and the second is the value/values.
 
-### atomic_append(arraycolumn, value)
-atomic_append will take a single value to append it on to the end of the specified PG array. Example:
+### Appending
+Method `atomic_append(array_column, value)` will take a single value to append it on to the end of the specified PG array. Example:
 ```ruby
 user = User.find(1)
 # => <#User id: 1, hobbies: ["Basketball", "Racing"]>
@@ -47,8 +47,8 @@ user.atomic_append(:hobbies, "Eating")
 # => <#User id: 1, hobbies: ["Basketball", "Racing", "Eating"]>  # "Eating" was appended to the array in the db.
 ```
 
-### atomic_remove(arraycolumn, value)
-atomic_remove will remove a single value from the specified PG array. It should be noted that the PG array "remove" function removes ALL occurences of that value, therefore this method does as well. Example:
+### Removing
+Method `atomic_remove(array_column, value)` will remove a single value from the specified PG array. It should be noted that the PG array "remove" function removes ALL occurences of that value, therefore this method does as well. Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, friend_ids: [12, 34, 89]>
@@ -56,8 +56,8 @@ user.atomic_remove(:friend_ids, 12)
 # => <#User id: 2, friend_ids: [34, 89]>  # 12 was removed from the array in the db.
 ```
 
-### atomic_cat(arraycolumn, valuearray)
-atomic_cat will concatenate an array of values with the specified PG array. Example:
+### Concatenation
+Method `atomic_cat(array_column, value_array)` will concatenate an array of values with the specified PG array. Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, friend_ids: [34, 89]>
@@ -65,8 +65,8 @@ user.atomic_cat(:friend_ids, [34, 30, 56, 90])
 # => <#User id: 2, friend_ids: [34, 89, 34, 30, 56, 90]>  # All four values were concatenated with the array in the db.
 ```
 
-### atomic_relate(arraycolumn, relatedclass, limit=100)
-This method is a little odd and unorthodox with a relational db. It assists with querying a denormalized database that uses arrays. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog's id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! Example:
+### Relating
+Method `atomic_relate(array_column, related_class, limit=100)` is a little odd and unorthodox with a relational db. It assists with querying a denormalized database that uses arrays. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog's id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you could potentially just use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
