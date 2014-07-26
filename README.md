@@ -113,7 +113,7 @@ Apologies for any syntax highlighting or grammar issues above.
 
 There is also a class method that this gem uses internally called `execute_and_wrap`. It was heavily influenced by `find_by_sql` in ActiveRecord, so thank you to the Rails guys.
 
-This gem is focused on being both lightweight and performance-oriented. The entire gem is only about fifty lines of actual code. I tried to make the API as simple and predictable as possible. It was tested against Ruby-2.1.0. If you are looking to use the JRuby-AR adapter, this gem is very easy to replicate and modify to fit with the JRuby-AR adapter. I tried it with an earlier iteration of this gem and had no problems adapting it, but I have not tested this version of the gem with JRuby.
+This gem is focused on being both lightweight and performance-oriented. The entire gem is only about fifty lines of actual code. I tried to make the API as simple and predictable as possible. It was tested against Ruby-2.1.0, ActiveRecord 4.0.x, and Postgres 9.3. If you are looking to use the JRuby-AR adapter, this gem is very easy to replicate and modify to fit with the JRuby-AR adapter. I tried it with an earlier iteration of this gem and had no problems adapting it, but I have not tested this version of the gem with JRuby.
 
 This gem is especially powerful if your favorite animal is either a Unicorn or a Puma.
 
