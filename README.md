@@ -29,8 +29,8 @@ class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users, force: true do |t|
       t.string   :name
-      t.text     :hobbies,      array: true,  default: []   # This is an array of strings
-      t.integer  :comment_ids,  array: true,  default: []   # This is an array of ints
+      t.text     :hobbies,      array: true,  default: []  # This is an array of strings
+      t.integer  :comment_ids,  array: true,  default: []  # This is an array of ints
     end
   end
 end
