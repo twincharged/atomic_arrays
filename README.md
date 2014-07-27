@@ -87,23 +87,23 @@ So be it! All methods in this gem share the same first argument. When you pass t
 
 Here's an example of nonatomic arrays. Pretend the code on the left and right are happening at the same time:
 ```ruby
-user = User.find(2)                           |   user = User.find(2)
-# => <#User id: 2, blog_ids: [4, 16]>         |   # => <#User id: 2, blog_ids: [4, 16]>
-user.update({blog_ids: user.blog_ids+=[20]})  |   ...  
-# => <#User id: 2, blog_ids: [4, 16, 20]>     |   ...
-...                                           |   user.update({blog_ids: user.blog_ids+=[35]})
-...                                           |   # => <#User id: 2, blog_ids: [4, 16, 35]>
+user = User.find(2)                          |  user = User.find(2)
+# => <#User id: 2, blog_ids: [4, 16]>        |  # => <#User id: 2, blog_ids: [4, 16]>
+user.update({blog_ids: user.blog_ids+=[20]}) |  ...  
+# => <#User id: 2, blog_ids: [4, 16, 20]>    |  ...
+...                                          |  user.update({blog_ids: user.blog_ids+=[35]})
+...                                          |  # => <#User id: 2, blog_ids: [4, 16, 35]>
 ```
 The same user was being updated on both the left and right, and because the instance on the right side was updated last, it over-wrote the left side's added `blog_id` of `20` with its own `blog_id` update of `35`.
 
 Here's how this gem works in the same situation.
 ```ruby
-user = User.find(2)                         |   user = User.find(2)
-# => <#User id: 2, blog_ids: [4, 16]>       |   # => <#User id: 2, blog_ids: [4, 16]>
-user.atomic_append(:blog_ids, 20)           |   ...
-# => <#User id: 2, blog_ids: [4, 16, 20]>   |   ...
-...                                         |   user.atomic_append(:blog_ids, 35)
-...                                         |   # => <#User id: 2, blog_ids: [4, 16, 20, 35]>
+user = User.find(2)                          |  user = User.find(2)
+# => <#User id: 2, blog_ids: [4, 16]>        |  # => <#User id: 2, blog_ids: [4, 16]>
+user.atomic_append(:blog_ids, 20)            |  ...
+# => <#User id: 2, blog_ids: [4, 16, 20]>    |  ...
+...                                          |  user.atomic_append(:blog_ids, 35)
+...                                          |  # => <#User id: 2, blog_ids: [4, 16, 20, 35]>
 ```
 The user's `blog_ids` will now include both `20` and `35` because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
 
