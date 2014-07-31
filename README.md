@@ -107,6 +107,13 @@ user.atomic_append(:blog_ids, 20)           |   ...
 ```
 The user's `blog_ids` will now include both `20` and `35` because this gem's methods append the value to the raw data array in the db first, then return the rows and re-hydrate the instance.
 
+## Releases
+
+`1.0.0` - Initial release.
+
+`1.1.0` - Replaced `IN` with `JOIN` clause for `atomic_relate`, providing much better performance with large arrays.
+
+
 ## Etcetera
 
 Apologies for any syntax highlighting or grammar issues above.

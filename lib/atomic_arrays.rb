@@ -30,7 +30,7 @@ module AtomicArrays
       raise "Relates to a class, not a string or integer." if (related_class.is_a?(Integer) || related_class.is_a?(String))
       (table, field) = self.prepare_array_query(field)
       related_table = related_class.table_name.inspect
-      return result = related_class.execute_and_wrap(%Q{SELECT #{related_table}.* FROM #{related_table} WHERE #{related_table}.id IN (SELECT unnest(#{table}.#{field}) FROM #{table} WHERE #{table}.id = #{self.id}) LIMIT #{limit}})
+      return result = related_class.execute_and_wrap(%Q{SELECT #{related_table}.* FROM #{related_table} JOIN (SELECT unnest(#{table}.#{field}) AS id FROM #{table} WHERE #{table}.id = #{self.id}) u USING (id) LIMIT #{limit}})
   end
 
   def execute_array_query(field, value, array_method)
@@ -47,7 +47,7 @@ module AtomicArrays
 
   def prepare_array_vals(value)
       prep_array = []
-      [*value].map {|val| val = "\'#{val}\'" if val.class == String; prep_array.push(val)} 
+      [*value].map {|val| val = "\'#{val}\'" if val.class == String; prep_array.push(val)}
       return prep_array.join(", ")
   end
 

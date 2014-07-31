@@ -4,7 +4,11 @@ require "rspec"
 require "yaml"
 
 ActiveRecord::Base.establish_connection(YAML.load_file(File.expand_path("../db/database.yml", __FILE__))["test"])
-# load File.dirname(__FILE__) + '/migrations.rb'
+
+RSpec.configure do |config|
+  config.color = true
+  config.tty = true
+end
 
 
 class User < ActiveRecord::Base
@@ -15,6 +19,8 @@ end
 class Comment < ActiveRecord::Base
   include AtomicArrays
 end
+
+# Seed
 
 Comment.create({id: 1, user_id: 1, body: "from user 1!!!", tags: ["#fun"]})
 Comment.create({id: 2, user_id: 2, body: "from user 2!!!", liker_ids: [4,5]})

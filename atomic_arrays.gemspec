@@ -8,12 +8,12 @@ Gem::Specification.new do |spec|
   spec.version       = AtomicArrays::VERSION
   spec.authors       = ["Joseph"]
   spec.email         = ["joseph.cs.ritchie@gmail.com"]
-  spec.summary       = %q{ActiveRecord extension for atomically updating PostgreSQL arrays.}
-  spec.description   = %q{AtomicArrays aims to assist ActiveRecord with updating Postgres arrays
-                          by offering a couple simple methods to change arrays in both the database
-                          and the instance it is called on. These methods are atomic in nature
-                          because they update the arrays in the database without relying on the current
-                          object's instantiated arrays.}
+  spec.summary       = %q{ActiveRecord extension for atomic operations on PostgreSQL arrays.}
+  spec.description   = %q{AtomicArrays is a lightweight gem that aims to assist ActiveRecord
+                          with PostgreSQL array operations by offering a couple simple methods
+                          to update arrays in the database and the instance that it is called on.
+                          These methods are atomic in nature because they update the arrays in
+                          the database without relying on the current object's instantiated arrays.}
   spec.homepage      = "https://github.com/twincharged/atomic_arrays"
   spec.license       = "MIT"
 
