@@ -26,7 +26,8 @@ module AtomicArrays
       return self.execute_array_query(field, "ARRAY[#{values}]", "array_cat")
   end
 
-  def atomic_relate(field, related_class, limit=100)
+  def atomic_relate(field, related_class=nil, limit=100)
+      related_class ||= field.to_s.split("_")[0].capitalize.constantize
       raise "Relates to a class, not a string or integer." if (related_class.is_a?(Integer) || related_class.is_a?(String))
       (table, field) = self.prepare_array_query(field)
       related_table = related_class.table_name.inspect
