@@ -66,7 +66,7 @@ user.atomic_cat(:friend_ids, [34, 30, 56, 90])
 ```
 
 ### Relating
-Method `atomic_relate(array_column, related_class=nil, limit=100)` is a little odd and unorthodox with a relational db. It assists with querying a denormalized database that uses arrays. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog's id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you can use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! This method will automatically parse the symbol you pass in the first argument into a class (`:blog_ids` -> `Blog`), unless you pass a class in the second argument `atomic_relate(:friend_ids, User) #=> looks in the user table`. Example:
+Method `atomic_relate(array_column, related_class=nil, limit=100)` is a little odd and unorthodox with a relational db. It assists with querying a denormalized database that uses arrays. Let's say your `users` table has an array column called `blog_ids` and you also have a `blogs` table with each row having an id, like normal. Every time a `User` creates a blog, you could append that blog's id to your user's `blog_ids` column. When relating your user to his/her blogs (`one->many`), rather than scanning the `blogs`.`user_id` column for your user's id, you can use this method to grab all of his/her blogs in a single query, without scanning a table. First, make sure `AtomicArrays` is included in both classes, then it'll be ready to go! This method will automatically parse the symbol you pass in the first argument into a class (`:blog_ids -> Blog`), unless you pass a class in the second argument `atomic_relate(:friend_ids, User) #=> looks in the user table`. Example:
 ```ruby
 user = User.find(2)
 # => <#User id: 2, blog_ids: [4, 16, 74]>
@@ -113,6 +113,7 @@ The user's `blog_ids` will now include both `20` and `35` because this gem's met
 
 `1.1.0` - Replaced `IN` with `JOIN` clause for `atomic_relate`, providing much better performance with large arrays.
 
+`1.1.2` - Made second argument in method `atomic_relate` optional.
 
 ## Etcetera
 
